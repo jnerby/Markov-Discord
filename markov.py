@@ -1,6 +1,24 @@
 """Generate Markov text from text files."""
-
+import os
+import discord
 from random import choice
+
+client = discord.Client()
+
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    # issue was with message.content.startswith - changed to else statement
+    else:
+        print("Message sent")
+        await message.channel.send(make_text(chains))
+
 
 
 def open_and_read_file(file_path):
@@ -11,7 +29,6 @@ def open_and_read_file(file_path):
     """
 
     contents = open(file_path).read()
-
 
     return contents
 
@@ -115,4 +132,7 @@ chains = make_chains(input_text)
 # # Produce random text
 random_text = make_text(chains)
 
-print(random_text)
+
+# print(random_text)
+
+client.run(os.environ['DISCORD_TOKEN'])
